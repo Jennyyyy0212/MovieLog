@@ -32,8 +32,10 @@ export const AuthProvider = ({ children }) => {
       const response = await authService.login(email, password);
       const { token } = response;
       
-      localStorage.setItem('token', token);
-      setToken(token);
+      if (token) {
+        localStorage.setItem('token', token);
+        setToken(token);
+      }
       
       // In a real app, you'd decode the JWT to get user info
       setUser({ userId: 'decoded-from-token' });

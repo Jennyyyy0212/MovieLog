@@ -29,10 +29,11 @@ const ReviewList = ({ onReviewsFetched, reviews }) => {
     try {
       console.log("Token used:", token);
       const data = await reviewService.getUserReviews(); // Fetch only user's reviews
-      console.log("Review API Response:", data); // Debug API response
+      const reviewData = data.data || []; // 👈 safely get the array
+      console.log("Review API Response:", reviewData); // Debug API response
 
       if (onReviewsFetched) {
-        onReviewsFetched(data); // ✅ Pass data back if needed
+        onReviewsFetched(reviewData);
       }
     } catch (err) {
       console.error("Error fetching reviews:", err);
@@ -44,6 +45,11 @@ const ReviewList = ({ onReviewsFetched, reviews }) => {
 
   // Fetch reviews when the component mounts
   useEffect(() => {
+
+    if (!authLoading && token) {
+      fetchUserReviews(); // runs on initial mount
+    }
+
     const handleReviewAdded = () => {
       fetchUserReviews();
     };

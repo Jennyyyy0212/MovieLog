@@ -11,21 +11,24 @@ import {
   CircularProgress,
   Avatar,
   TableContainer,
+  Box
 } from "@mui/material"
 
 
 const ReviewItems = ({ reviews }) => {
-
-  // State to store movie details
+    // State to store movie details
   const [movies, setMovies] = useState({});
   const [loading, setLoading] = useState(true);
 
+  const safeReviews = Array.isArray(reviews) ? reviews : [];
+
    // Extract user review data
-  const userReviews = reviews.flatMap(movie => movie.userReviews.map(review => ({
+  const userReviews = safeReviews.flatMap(movie => movie.userReviews.map(review => ({
     movieId: movie.movieId,
     title: movie.title,
     reviewText: review.reviewText,
-    rating: review.rating
+    rating: review.rating,
+    createdAt: review.createdAt,
   })));
 
   // Fetch movie details for each unique movieId
@@ -50,26 +53,16 @@ const ReviewItems = ({ reviews }) => {
         setLoading(false);
       }
     };
-
     if (userReviews.length > 0) {
       fetchMovieDetails();
     } else {
       setLoading(false); // No reviews, no need to fetch
     }
   }, [reviews]); // Depend on `reviews` prop to refetch when it changes
- 
-  //Ensure `reviews` is correctly structured 
-  if (!Array.isArray(reviews)) {
-    console.error("Invalid reviews data format:", reviews);
-    return <p className="text-red-500">Error loading reviews.</p>;
-  }
+
 
   return (
-    <Paper sx={{ p: 4, mt: 3, borderRadius: 2 }}>
-      <Typography variant="h5" fontWeight="bold" gutterBottom>
-        Your Reviews
-      </Typography>
-
+    <Box sx={{ mt: 2 }}>
       {userReviews.length > 0 ? (
         <TableContainer component={Paper}>
           <Table>
@@ -134,7 +127,7 @@ const ReviewItems = ({ reviews }) => {
       ) : (
         <Typography color="textSecondary">You haven't reviewed any movies yet.</Typography>
       )}
-    </Paper>
+    </Box>
   );
 
 };
