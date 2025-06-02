@@ -55,10 +55,6 @@ router.get("/", auth, async (req, res) => {
 
     const movies = await Movie.find({ "reviews.user": req.user.userId });
 
-    if (!movies.length) {
-      return res.status(404).json({ message: "No reviews found" });
-    }
-
     const userReviews = movies.map(movie => {
       const userReview = movie.reviews.find(r => r.user.toString() === req.user.userId);
       return {
@@ -68,7 +64,10 @@ router.get("/", auth, async (req, res) => {
       };
     });
 
-    res.json(userReviews);
+    res.json({
+      message: userReviews.length ? "Successfully fetched reviews" : "No reviews found",
+      data: userReviews
+    });
   } catch (err) {
     console.error("Error fetching reviews:", err);
     res.status(500).json({ error: err.message });
