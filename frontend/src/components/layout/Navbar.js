@@ -32,35 +32,6 @@ const Navbar = ({li}) => {
     setOpen(!open);
   };
 
-  /**
-   <nav className="bg-gray-800 text-white py-4">
-      <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold">Movie Review App</Link>
-        
-        <div className="flex gap-4">
-          <Link to="/" className="hover:text-gray-300">Home</Link>
-          <Link to="/search" className="hover:text-gray-300">Search</Link>
-          
-          {isAuthenticated ? (
-            <>
-              <Link to="/my-reviews" className="hover:text-gray-300">My Reviews</Link>
-              <button 
-                onClick={logout} 
-                className="hover:text-gray-300"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="hover:text-gray-300">Login</Link>
-              <Link to="/register" className="hover:text-gray-300">Register</Link>
-            </>
-          )}
-        </div>
-      </div>
-    </nav>
-   */
   return (
     <Box sx={{ display: "flex" }}>
       {/* Sidebar */}
@@ -117,8 +88,8 @@ const Navbar = ({li}) => {
               </ListItem>
 
               <ListItem disablePadding>
-                <ListItemButton onClick={logout}>
-                  <ListItemIcon>
+                <ListItemButton onClick={logout} sx={{ justifyContent: open ? "flex-start" : "center" }}>
+                  <ListItemIcon sx={{ justifyContent: open ? "flex-start" : "center" }}>
                     <LogoutIcon />
                   </ListItemIcon>
                   {open && <ListItemText primary="Logout" />}
